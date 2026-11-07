@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SOP-ENG-082",
+    "title": "Payment Webhook Timeout & Gateway Failover",
+    "domain": "Engineering / Payments",
+    "severity": "CRITICAL",
+    "summary": "Step-by-step mitigation for handling dropped callbacks and latency spikes from external payment gateways.",
+    "steps": [
+      "Switch API Gateway ingress route to secondary payment proxy with exponential retry.",
+      "Activate Redis idempotency queue to prevent duplicate transactions on delayed callbacks.",
+      "Notify Customer Support with affected transaction range and pre-approved customer notification draft."
+    ],
+    "owner": "Payment Core Team (Lead: Budi Pratama)",
+    "last_reviewed": "2026-09-15"
+  },
+  {
+    "id": "SOP-OPS-014",
+    "title": "Database Connection Pool Saturation Recovery",
+    "domain": "Infrastructure / DevOps",
+    "severity": "HIGH",
+    "summary": "Procedures for mitigating connection exhaustion caused by cascading long-running analytical queries.",
+    "steps": [
+      "Terminate orphan read queries idle for more than 45 seconds.",
+      "Temporarily increase PgBouncer pool ceiling by 25% with memory headroom guard.",
+      "Throttle non-critical background synchronization workers."
+    ],
+    "owner": "SRE & Infrastructure (Lead: Rizky Sanjaya)",
+    "last_reviewed": "2026-08-30"
+  },
+  {
+    "id": "SOP-CS-005",
+    "title": "Major Service Degradation Client Communication Protocol",
+    "domain": "Customer Success / Operations",
+    "severity": "MEDIUM",
+    "summary": "Escalation paths and transparent messaging templates for merchant enterprise partners during downtime.",
+    "steps": [
+      "Publish status banner to Merchant Dashboard status page within 3 minutes.",
+      "Dispatch proactive email to top-tier enterprise clients with incident tracking ID.",
+      "Provide CS agents with standard Q&A responses regarding transaction auto-reconciliation."
+    ],
+    "owner": "Customer Support Operations (Lead: Sarah Amalia)",
+    "last_reviewed": "2026-10-01"
+  }
+]

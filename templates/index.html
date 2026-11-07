@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusOps — Autonomous Spatial War Room & Workplace Brain</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #090d16;
+      color: #e2e8f0;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .grid-bg {
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+    @keyframes pulseSlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.98); }
+    }
+    .pulse-alert {
+      animation: pulseSlow 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col grid-bg text-slate-100 overflow-x-hidden">
+
+  <!-- Top Navigation & Global Status Bar -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-50 px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-white shadow-lg shadow-cyan-500/20">
+        N
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-bold text-base tracking-tight text-white">NexusOps</h1>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 font-mono">Tencent Cloud WorkBuddy Desktop</span>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">Challenge A & B</span>
+        </div>
+        <p class="text-xs text-slate-400">Autonomous Spatial War Room & Enterprise Workplace Brain</p>
+      </div>
+    </div>
+
+    <!-- Quick Simulation Actions -->
+    <div class="flex flex-wrap items-center gap-2.5">
+      <div id="sync-container" class="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg py-1.5 px-2.5 transition">
+        <span id="sync-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+        <span id="sync-badge" class="text-[11px] font-mono text-slate-400">WorkBuddy AI.app: CHECKING...</span>
+      </div>
+
+      <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-lg p-1.5 px-3">
+        <span class="text-xs text-slate-400">Telemetry:</span>
+        <span id="system-badge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ALL SYSTEMS HEALTHY
+        </span>
+      </div>
+
+      <button id="btn-trigger-payment" onclick="triggerIncident('payment', 'web_ui')" class="text-xs font-medium px-3 py-2 rounded-lg bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/40 transition flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-red-500"></span> Trigger Payment Gateway Timeout
+      </button>
+
+      <button id="btn-trigger-db" onclick="triggerIncident('db', 'web_ui')" class="text-xs font-medium px-3 py-2 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 transition flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Trigger DB Congestion
+      </button>
+
+      <button onclick="resetSystem()" class="text-xs font-medium px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main class="flex-1 p-6 grid grid-cols-12 gap-6 max-w-[1700px] w-full mx-auto">
+
+    <!-- Left Column: Spatial Architecture & Live Node Topology (Col 4) -->
+    <section class="col-span-12 lg:col-span-4 flex flex-col gap-4">
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-sm font-semibold tracking-wide text-white uppercase flex items-center gap-2">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+              Spatial Infrastructure Topology
+            </h2>
+            <p class="text-xs text-slate-400">Live inter-service health & cross-functional blast radius</p>
+          </div>
+          <span class="text-[11px] font-mono text-slate-400 bg-slate-950/70 px-2 py-0.5 rounded border border-slate-800">6 Active Nodes</span>
+        </div>
+
+        <!-- Canvas for Node Graph -->
+        <div class="relative w-full h-[380px] bg-slate-950/90 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center">
+          <canvas id="topologyCanvas" class="w-full h-full block"></canvas>
+          <div id="radar-overlay" class="absolute bottom-3 left-3 text-[11px] font-mono text-slate-400 bg-slate-900/90 px-2 py-1 rounded border border-slate-800">
+            Active Nodes: 6 | API RTT: -- ms
+          </div>
+        </div>
+
+        <!-- Service Status Badges List -->
+        <div class="grid grid-cols-2 gap-2 mt-4 text-xs font-mono">
+          <div id="card-api" class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+            <span class="text-slate-300">API Gateway</span>
+            <span class="status-indicator text-emerald-400">● 99.98%</span>
+          </div>
+          <div id="card-payment" class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+            <span class="text-slate-300">Payment Core</span>
+            <span class="status-indicator text-emerald-400">● 99.95%</span>
+          </div>
+          <div id="card-db" class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+            <span class="text-slate-300">Primary DB</span>
+            <span class="status-indicator text-emerald-400">● PgBouncer OK</span>
+          </div>
+          <div id="card-auth" class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+            <span class="text-slate-300">Auth & Token</span>
+            <span class="status-indicator text-emerald-400">● Nominal</span>
+          </div>
+          <div id="card-merchant" class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+            <span class="text-slate-300">Merchant Portal</span>
+            <span class="status-indicator text-emerald-400">● Active</span>
+          </div>
+          <div id="card-support" class="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+            <span class="text-slate-300">Support Desk</span>
+            <span class="status-indicator text-emerald-400">● Standby</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Center Column: NexusOps Agent Execution Loop (Col 5) -->
+    <section class="col-span-12 lg:col-span-5 flex flex-col gap-4">
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur flex-1 flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div>
+            <h2 class="text-sm font-semibold tracking-wide text-white uppercase flex items-center gap-2">
+              <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              NexusOps Agentic War Room
+            </h2>
+            <p class="text-xs text-slate-400">Controlled via Tencent Cloud WorkBuddy Desktop (`WorkBuddy AI.app`)</p>
+          </div>
+          <span id="agent-state-badge" class="px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-slate-800 text-slate-400 border border-slate-700">
+            AGENT: STANDBY
+          </span>
+        </div>
+
+        <!-- Real-time Agent Log Stream -->
+        <div id="agent-console" class="flex-1 my-3 p-4 rounded-xl bg-slate-950/90 border border-slate-800 font-mono text-xs overflow-y-auto max-h-[430px] space-y-3 leading-relaxed">
+          <div id="standby-console-msg" class="text-slate-400">
+            &gt; Checking local OS process for Tencent Cloud WorkBuddy Desktop (<code>WorkBuddy AI.app</code>)...
+          </div>
+        </div>
+
+        <!-- Action Control Panel -->
+        <div id="action-bar" class="p-3.5 bg-slate-950/70 rounded-xl border border-slate-800 flex items-center justify-between hidden">
+          <div>
+            <div class="text-xs font-semibold text-white" id="action-title">Mitigation Plan Ready</div>
+            <div class="text-[11px] text-slate-400" id="action-subtitle">SOP validated by Workplace Brain</div>
+          </div>
+          <button id="btn-mitigate" onclick="executeMitigation('web_ui')" class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-xs rounded-lg shadow-lg shadow-cyan-500/20 transition flex items-center gap-2">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            Execute Automated Mitigation
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Workplace Brain & Knowledge Graph (Col 3) -->
+    <section class="col-span-12 lg:col-span-3 flex flex-col gap-4">
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur flex-1 flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div>
+            <h2 class="text-sm font-semibold tracking-wide text-white uppercase flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+              Workplace Brain
+            </h2>
+            <p class="text-xs text-slate-400">WorkBuddy Workspace Library (`sop_data.json`)</p>
+          </div>
+        </div>
+
+        <!-- Matched SOP Section -->
+        <div class="mt-4 flex flex-col gap-3 flex-1">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Semantic SOP Match</div>
+          <div id="sop-card" class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs">
+            <div class="font-medium text-slate-300 flex items-center justify-between mb-1">
+              <span id="sop-id" class="text-cyan-400 font-mono">SOP-IDLE</span>
+              <span id="sop-badge" class="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">STANDBY</span>
+            </div>
+            <div id="sop-title" class="text-white font-semibold text-xs mb-1">Knowledge Library Indexed</div>
+            <p id="sop-summary" class="text-slate-400 text-[11px] leading-relaxed">
+              Loading <code>sop_data.json</code> from local workspace...
+            </p>
+          </div>
+
+          <!-- Accountability Task Tracker -->
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-2">Dispatched Action Items</div>
+          <div id="task-tracker" class="flex flex-col gap-2 overflow-y-auto max-h-[220px]">
+            <div class="text-slate-500 text-xs italic p-2 bg-slate-950/40 rounded border border-slate-800/40">
+              No tasks currently dispatched.
+            </div>
+          </div>
+
+          <!-- Post-Mortem Card -->
+          <div id="post-mortem-section" class="mt-2 hidden">
+            <div class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider flex items-center justify-between mb-1.5">
+              <span>Executive Post-Mortem</span>
+              <span class="text-[10px] font-mono text-emerald-500">Saved to POST_MORTEM_LATEST.md</span>
+            </div>
+            <div id="post-mortem-content" class="p-3 rounded-lg bg-emerald-950/20 border border-emerald-800/40 text-[11px] text-slate-300 font-mono leading-relaxed max-h-[140px] overflow-y-auto whitespace-pre-line">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Scripts -->
+  <script>
+    // Topology Canvas Setup
+    const canvas = document.getElementById('topologyCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resizeCanvas() {
+      width = canvas.parentElement.clientWidth;
+      height = canvas.parentElement.clientHeight;
+      canvas.width = width * window.devicePixelRatio;
+      canvas.height = height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('DOMContentLoaded', resizeCanvas);
+    if (document.readyState !== 'loading') resizeCanvas();
+
+    const nodes = [
+      { id: 'api', name: 'API Gateway', x: 0.5, y: 0.22, status: 'ok', type: 'core' },
+      { id: 'payment', name: 'Payment Core', x: 0.25, y: 0.52, status: 'ok', type: 'service' },
+      { id: 'db', name: 'Primary DB', x: 0.75, y: 0.52, status: 'ok', type: 'storage' },
+      { id: 'auth', name: 'Auth & Token', x: 0.5, y: 0.52, status: 'ok', type: 'service' },
+      { id: 'merchant', name: 'Merchant Portal', x: 0.25, y: 0.82, status: 'ok', type: 'client' },
+      { id: 'support', name: 'Support Desk', x: 0.75, y: 0.82, status: 'ok', type: 'client' },
+    ];
+
+    const links = [
+      { from: 'api', to: 'payment' },
+      { from: 'api', to: 'auth' },
+      { from: 'api', to: 'db' },
+      { from: 'payment', to: 'merchant' },
+      { from: 'db', to: 'support' },
+      { from: 'auth', to: 'db' }
+    ];
+
+    let currentIncident = null;
+    let lastSyncedVersion = 1;
+    let isAnimating = false;
+    let lastRttMs = 0;
+
+    let particles = [];
+    for (let i = 0; i < 18; i++) {
+      particles.push({
+        linkIndex: Math.floor(Math.random() * links.length),
+        t: Math.random(),
+        speed: 0.005 + Math.random() * 0.008
+      });
+    }
+
+    function renderTopology() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw Links
+      links.forEach((link) => {
+        const fromNode = nodes.find(n => n.id === link.from);
+        const toNode = nodes.find(n => n.id === link.to);
+        const x1 = fromNode.x * width;
+        const y1 = fromNode.y * height;
+        const x2 = toNode.x * width;
+        const y2 = toNode.y * height;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+
+        const hasIncident = (fromNode.status === 'error' || toNode.status === 'error');
+        ctx.strokeStyle = hasIncident ? 'rgba(239, 68, 68, 0.4)' : 'rgba(51, 65, 85, 0.6)';
+        ctx.lineWidth = hasIncident ? 2.5 : 1.5;
+        if (hasIncident) {
+          ctx.setLineDash([4, 4]);
+        } else {
+          ctx.setLineDash([]);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+      });
+
+      // Animate Flow Particles
+      particles.forEach(p => {
+        const link = links[p.linkIndex];
+        const fromNode = nodes.find(n => n.id === link.from);
+        const toNode = nodes.find(n => n.id === link.to);
+        const isError = (fromNode.status === 'error' || toNode.status === 'error');
+
+        p.t += p.speed;
+        if (p.t > 1) p.t = 0;
+
+        const px = fromNode.x * width + (toNode.x * width - fromNode.x * width) * p.t;
+        const py = fromNode.y * height + (toNode.y * height - fromNode.y * height) * p.t;
+
+        ctx.beginPath();
+        ctx.arc(px, py, isError ? 3.5 : 2, 0, Math.PI * 2);
+        ctx.fillStyle = isError ? '#ef4444' : '#06b6d4';
+        ctx.shadowColor = isError ? '#ef4444' : '#06b6d4';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // Draw Nodes
+      nodes.forEach(node => {
+        const nx = node.x * width;
+        const ny = node.y * height;
+        const isError = node.status === 'error';
+        const isWarning = node.status === 'warning';
+
+        // Outer glow
+        ctx.beginPath();
+        ctx.arc(nx, ny, 16, 0, Math.PI * 2);
+        ctx.fillStyle = isError ? 'rgba(239, 68, 68, 0.2)' : (isWarning ? 'rgba(245, 158, 11, 0.2)' : 'rgba(6, 182, 212, 0.15)');
+        ctx.fill();
+
+        // Node Circle
+        ctx.beginPath();
+        ctx.arc(nx, ny, 10, 0, Math.PI * 2);
+        ctx.fillStyle = isError ? '#ef4444' : (isWarning ? '#f59e0b' : '#06b6d4');
+        ctx.shadowColor = isError ? '#ef4444' : '#06b6d4';
+        ctx.shadowBlur = isError ? 15 : 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Label
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.fillStyle = isError ? '#fca5a5' : '#cbd5e1';
+        ctx.textAlign = 'center';
+        ctx.fillText(node.name, nx, ny + 24);
+      });
+
+      requestAnimationFrame(renderTopology);
+    }
+    requestAnimationFrame(renderTopology);
+
+    // Audio effects simulation via Web Audio API
+    function playBeep(freq = 440, duration = 0.1) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    function logLine(consoleEl, text, delay = 0) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const div = document.createElement('div');
+          div.innerHTML = text;
+          consoleEl.appendChild(div);
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+          playBeep(600, 0.05);
+          resolve();
+        }, delay);
+      });
+    }
+
+    // Render Incident UI (called whether triggered from WorkBuddy Desktop App or Web UI)
+    async function renderIncidentUI(data) {
+      isAnimating = true;
+      currentIncident = data;
+      const type = data.type || 'payment';
+
+      playBeep(880, 0.2);
+      setTimeout(() => playBeep(440, 0.2), 150);
+
+      const sysBadge = document.getElementById('system-badge');
+      sysBadge.className = 'inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-md bg-red-500/10 text-red-400 border border-red-500/30 font-mono pulse-alert';
+      sysBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400 animate-ping"></span> CRITICAL ANOMALY DETECTED`;
+
+      document.getElementById('post-mortem-section').classList.add('hidden');
+      nodes.forEach(n => n.status = 'ok');
+      document.getElementById('card-api').innerHTML = `<span class="text-slate-300">API Gateway</span><span class="status-indicator text-emerald-400">● 99.98%</span>`;
+      document.getElementById('card-payment').innerHTML = `<span class="text-slate-300">Payment Core</span><span class="status-indicator text-emerald-400">● 99.95%</span>`;
+      document.getElementById('card-db').innerHTML = `<span class="text-slate-300">Primary DB</span><span class="status-indicator text-emerald-400">● PgBouncer OK</span>`;
+      document.getElementById('card-auth').innerHTML = `<span class="text-slate-300">Auth & Token</span><span class="status-indicator text-emerald-400">● Nominal</span>`;
+      document.getElementById('card-merchant').innerHTML = `<span class="text-slate-300">Merchant Portal</span><span class="status-indicator text-emerald-400">● Active</span>`;
+      document.getElementById('card-support').innerHTML = `<span class="text-slate-300">Support Desk</span><span class="status-indicator text-emerald-400">● Standby</span>`;
+
+      if (type === 'payment') {
+        nodes.find(n => n.id === 'payment').status = 'error';
+        nodes.find(n => n.id === 'merchant').status = 'warning';
+        document.getElementById('card-payment').innerHTML = `<span class="text-red-400">Payment Core</span><span class="text-red-400 font-bold">● TIMEOUT 504</span>`;
+        document.getElementById('card-merchant').innerHTML = `<span class="text-amber-400">Merchant Portal</span><span class="text-amber-400">● 142 Pending</span>`;
+        document.getElementById('radar-overlay').innerText = `Active Nodes: 6 | Alert: Payment Core 504 | API RTT: ${lastRttMs}ms`;
+      } else {
+        nodes.find(n => n.id === 'db').status = 'error';
+        nodes.find(n => n.id === 'api').status = 'warning';
+        document.getElementById('card-db').innerHTML = `<span class="text-red-400">Primary DB</span><span class="text-red-400 font-bold">● Pool 100%</span>`;
+        document.getElementById('card-api').innerHTML = `<span class="text-amber-400">API Gateway</span><span class="text-amber-400">● Queueing</span>`;
+        document.getElementById('radar-overlay').innerText = `Active Nodes: 6 | Alert: DB Pool Exhausted | API RTT: ${lastRttMs}ms`;
+      }
+
+      document.getElementById('agent-state-badge').className = 'px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30';
+      document.getElementById('agent-state-badge').innerText = 'WORKBUDDY: ANALYZING';
+
+      const consoleEl = document.getElementById('agent-console');
+      consoleEl.innerHTML = '';
+
+      if (data.source && data.source !== 'web_ui') {
+        await logLine(consoleEl, `<span class="text-cyan-400 font-bold">[TENCENT WORKBUDDY DESKTOP]</span> Execution triggered from WorkBuddy Desktop CLI (<code>workbuddy_cli.py</code>).`, 150);
+      }
+
+      const matchScore = data.match_score !== undefined ? data.match_score : 100;
+      const matchedTerms = (data.matched_terms || []).join(', ');
+
+      await logLine(consoleEl, `<span class="text-red-400 font-bold">[ALERT INGESTION]</span> ${data.alert_log || ('Anomaly detected on ' + data.affected_node)}`, 250);
+      await logLine(consoleEl, `<span class="text-cyan-400 font-bold">[WORKPLACE BRAIN QUERY]</span> Matching incident tokens against <code>sop_data.json</code>...`, 400);
+      await logLine(consoleEl, `&gt; Matched Tokens: <code>[${matchedTerms}]</code>`, 200);
+      await logLine(consoleEl, `<span class="text-emerald-400 font-bold">[SOP RETRIEVED]</span> Match found: <strong class="text-white">${data.sop.id} — ${data.sop.title}</strong> (Token Overlap: ${matchScore}%).`, 400);
+
+      // Render SOP Card
+      document.getElementById('sop-id').innerText = `${data.sop.id} (${matchScore}%)`;
+      document.getElementById('sop-badge').className = 'px-1.5 py-0.5 rounded text-[10px] bg-red-900/60 text-red-300 border border-red-700/50';
+      document.getElementById('sop-badge').innerText = data.sop.severity || 'ACTIVE';
+      document.getElementById('sop-title').innerText = data.sop.title;
+      document.getElementById('sop-summary').innerHTML = `<strong>Domain:</strong> ${data.sop.domain}<br><strong>Owner:</strong> ${data.sop.owner}<br><strong>Mitigation:</strong> ${data.sop.summary}`;
+
+      await logLine(consoleEl, `<span class="text-purple-400 font-bold">[OFFICE AGENT DISPATCH]</span> WorkBuddy dispatching ${data.tasks.length} cross-functional action items with PIC accountability...`, 450);
+
+      // Render Task Tracker
+      const taskTracker = document.getElementById('task-tracker');
+      taskTracker.innerHTML = '';
+      data.tasks.forEach((t, i) => {
+        const item = document.createElement('div');
+        item.className = 'p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-xs flex flex-col gap-1';
+        item.id = `task-row-${i}`;
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-200">${t.title}</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 task-status">DISPATCHED</span>
+          </div>
+          <div class="text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Owner: <span class="text-slate-300 font-medium">${t.pic}</span></span>
+            <span class="font-mono text-cyan-400/80">ETA: ${t.eta}</span>
+          </div>
+        `;
+        taskTracker.appendChild(item);
+      });
+
+      await logLine(consoleEl, `<span class="text-white font-bold">[WAR ROOM READY]</span> Run mitigation from WorkBuddy Desktop App (<code>./workbuddy_cli.py mitigate</code>) or click Execute below.`, 350);
+
+      const btn = document.getElementById('btn-mitigate');
+      btn.disabled = false;
+      btn.innerText = 'Execute Automated Mitigation';
+      document.getElementById('action-bar').classList.remove('hidden');
+      document.getElementById('action-title').innerText = `Mitigation Ready for ${data.sop.id}`;
+      document.getElementById('action-subtitle').innerText = `Automated failover prepared by Tencent Cloud WorkBuddy Agent`;
+      isAnimating = false;
+    }
+
+    // Render Mitigation UI (called whether triggered from WorkBuddy Desktop App or Web UI)
+    async function renderMitigationUI(data) {
+      isAnimating = true;
+      const btn = document.getElementById('btn-mitigate');
+      btn.disabled = true;
+      btn.innerText = 'Executing Failover...';
+      playBeep(700, 0.1);
+
+      const consoleEl = document.getElementById('agent-console');
+      if (data.source && data.source !== 'web_ui') {
+        await logLine(consoleEl, `<span class="text-cyan-400 font-bold">[TENCENT WORKBUDDY DESKTOP]</span> Mitigation command received from WorkBuddy Desktop CLI.`, 200);
+      }
+
+      const logs = data.mitigation_logs || [];
+      for (const line of logs) {
+        const isSuccess = line.includes('RECOVERED') || line.includes('SAVED');
+        const colorClass = isSuccess ? 'text-emerald-400' : 'text-cyan-400';
+        const parts = line.split(']');
+        const formatted = `<span class="${colorClass} font-bold">${parts[0]}]</span>${parts.slice(1).join(']')}`;
+        await logLine(consoleEl, formatted, 400);
+      }
+
+      // Reset node statuses back to OK
+      nodes.forEach(n => n.status = 'ok');
+      document.getElementById('card-api').innerHTML = `<span class="text-slate-300">API Gateway</span><span class="text-emerald-400">● 99.98%</span>`;
+      document.getElementById('card-payment').innerHTML = `<span class="text-slate-300">Payment Core</span><span class="text-emerald-400">● 99.98% (Failover Active)</span>`;
+      document.getElementById('card-merchant').innerHTML = `<span class="text-slate-300">Merchant Portal</span><span class="text-emerald-400">● Nominal</span>`;
+      document.getElementById('card-db').innerHTML = `<span class="text-slate-300">Primary DB</span><span class="text-emerald-400">● PgBouncer OK</span>`;
+      document.getElementById('radar-overlay').innerText = `Active Nodes: 6 | API RTT: ${lastRttMs}ms (Nominal)`;
+
+      // Update SOP Badge
+      document.getElementById('sop-badge').className = 'px-1.5 py-0.5 rounded text-[10px] bg-emerald-900/60 text-emerald-300 border border-emerald-700/50';
+      document.getElementById('sop-badge').innerText = 'MITIGATED';
+
+      // Update Task Tracker statuses
+      const taskStatuses = document.querySelectorAll('#task-tracker .task-status');
+      taskStatuses.forEach(ts => {
+        ts.className = 'text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 task-status';
+        ts.innerText = 'RESOLVED';
+      });
+
+      // Update System Badge
+      const sysBadge = document.getElementById('system-badge');
+      sysBadge.className = 'inline-flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono';
+      sysBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> ALL SYSTEMS RECOVERED`;
+
+      // Show Post-Mortem
+      document.getElementById('post-mortem-section').classList.remove('hidden');
+      document.getElementById('post-mortem-content').innerText = data.post_mortem;
+
+      document.getElementById('action-bar').classList.add('hidden');
+      document.getElementById('agent-state-badge').className = 'px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+      document.getElementById('agent-state-badge').innerText = 'WORKBUDDY: RESOLVED';
+      playBeep(1000, 0.3);
+      isAnimating = false;
+    }
+
+    // Trigger Incident via API
+    async function triggerIncident(type, source = 'web_ui') {
+      try {
+        const res = await fetch(`/api/incident/trigger?type=${type}&source=${source}`, { method: 'POST' });
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        lastSyncedVersion = data.state_version || lastSyncedVersion;
+        await renderIncidentUI(data);
+      } catch (err) {
+        console.error('Failed to trigger incident:', err);
+        document.getElementById('agent-state-badge').innerText = 'AGENT: ERROR';
+      }
+    }
+
+    // Execute Mitigation via API
+    async function executeMitigation(source = 'web_ui') {
+      try {
+        const bodyPayload = currentIncident ? { incident_id: currentIncident.incident_id } : {};
+        const res = await fetch(`/api/incident/mitigate?source=${source}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bodyPayload)
+        });
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        lastSyncedVersion = data.state_version || lastSyncedVersion;
+        await renderMitigationUI(data);
+      } catch (err) {
+        console.error('Failed to execute mitigation:', err);
+      }
+    }
+
+    async function resetSystem() {
+      try {
+        await fetch('/api/incident/reset', { method: 'POST' });
+      } catch (e) {}
+      window.location.reload();
+    }
+
+    function updateWorkBuddyDesktopBadge(state) {
+      const wb = state.workbuddy_desktop;
+      const sopCount = state.sop_count || 3;
+      const container = document.getElementById('sync-container');
+      const dot = document.getElementById('sync-dot');
+      const badge = document.getElementById('sync-badge');
+      if (!wb) return;
+
+      if (wb.running) {
+        container.className = 'flex items-center gap-1.5 bg-cyan-950/40 border border-cyan-800/50 rounded-lg py-1.5 px-2.5 transition';
+        dot.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-pulse';
+        badge.className = 'text-[11px] font-mono text-cyan-300';
+        badge.innerText = `WorkBuddy Desktop: LIVE (PID ${wb.pid})`;
+      } else {
+        container.className = 'flex items-center gap-1.5 bg-slate-900/90 border border-amber-700/40 rounded-lg py-1.5 px-2.5 transition';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-500';
+        badge.className = 'text-[11px] font-mono text-amber-400/90';
+        badge.innerText = 'WorkBuddy Desktop: OFFLINE (App Closed)';
+      }
+
+      // If system is currently in HEALTHY standby state, update standby console & SOP summary accurately
+      if (state.status === 'HEALTHY' && !isAnimating) {
+        const standbyMsg = document.getElementById('standby-console-msg');
+        if (standbyMsg) {
+          if (wb.running) {
+            standbyMsg.innerHTML = `<span class="text-emerald-400 font-semibold">&gt; [WorkBuddy AI.app Detected — PID ${wb.pid}]</span> Connected to local workspace.<br>&gt; Workspace Library loaded: <span class="text-cyan-400">sop_data.json (${sopCount} SOPs)</span><br>&gt; Ready to receive commands from Tencent Cloud WorkBuddy Desktop App.`;
+          } else {
+            standbyMsg.innerHTML = `<span class="text-amber-400 font-semibold">&gt; [WorkBuddy AI.app Offline]</span> Application <code>/Applications/WorkBuddy AI.app</code> is currently closed.<br>&gt; Local SOP Library ready: <code>sop_data.json (${sopCount} SOPs)</code>.<br>&gt; Open <strong>WorkBuddy AI.app</strong> on your Mac to run natural language orchestration.`;
+          }
+        }
+        const sopSummary = document.getElementById('sop-summary');
+        if (sopSummary && document.getElementById('sop-id').innerText === 'SOP-IDLE') {
+          sopSummary.innerHTML = `Loaded <strong>${sopCount} SOPs</strong> from <code>sop_data.json</code>. WorkBuddy Desktop Status: <strong>${wb.running ? 'CONNECTED (PID ' + wb.pid + ')' : 'OFFLINE'}</strong>.`;
+        }
+        document.getElementById('radar-overlay').innerText = `Active Nodes: 6 | API RTT: ${lastRttMs}ms`;
+      }
+    }
+
+    // Poll Backend State so commands executed from Tencent Cloud WorkBuddy Desktop App update the UI live
+    async function pollWorkBuddyDesktopState() {
+      try {
+        const t0 = performance.now();
+        const res = await fetch('/api/state');
+        if (!res.ok) return;
+        lastRttMs = Math.max(1, Math.round(performance.now() - t0));
+        const state = await res.json();
+        updateWorkBuddyDesktopBadge(state);
+        if (isAnimating) return;
+        if (state.version && state.version !== lastSyncedVersion) {
+          lastSyncedVersion = state.version;
+          if (state.status === 'ACTIVE_UNMITIGATED' && state.active_incident) {
+            await renderIncidentUI(state.active_incident);
+          } else if (state.status === 'MITIGATED' && state.last_mitigation) {
+            await renderMitigationUI(state.last_mitigation);
+          } else if (state.status === 'HEALTHY') {
+            window.location.reload();
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Initialize state version on load & start polling every 1.2s
+    (async function initSync() {
+      try {
+        const t0 = performance.now();
+        const res = await fetch('/api/state');
+        if (res.ok) {
+          lastRttMs = Math.max(1, Math.round(performance.now() - t0));
+          const state = await res.json();
+          updateWorkBuddyDesktopBadge(state);
+          lastSyncedVersion = state.version || 1;
+          if (state.status === 'ACTIVE_UNMITIGATED' && state.active_incident) {
+            await renderIncidentUI(state.active_incident);
+          } else if (state.status === 'MITIGATED' && state.last_mitigation) {
+            await renderIncidentUI(state.active_incident);
+            await renderMitigationUI(state.last_mitigation);
+          }
+        }
+      } catch (e) {}
+      setInterval(pollWorkBuddyDesktopState, 1200);
+    })();
+  </script>
+</body>
+</html>

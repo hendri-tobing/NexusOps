@@ -1,0 +1,19 @@
+# Python & Virtual Environment
+.venv/
+__pycache__/
+*.pyc
+
+# OS Files
+.DS_Store
+
+# Non-Source Submission & Presentation Materials
+VOICE_OVER_SCRIPT.md
+PITCH_DECK.md
+pitch_deck.html
+NexusOps_Pitch_Deck.pdf
+*.pdf
+*.mp4
+*.mov
+
+# Runtime Generated Report
+POST_MORTEM_LATEST.md
